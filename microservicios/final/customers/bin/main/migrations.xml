@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="1" author="domix">
+    <createTable tableName="customers">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="first_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="last_name" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="business_name" type="varchar(255)"/>
+      <column name="email" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="tax_id" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+    <createTable tableName="addresses">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="street" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="name" type="varchar(255)"/>
+      <column name="country" type="varchar(255)">
+        <constraints nullable="false"/>
+      </column>
+      <column name="owner_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+    <addForeignKeyConstraint baseColumnNames="owner_id"
+                             baseTableName="addresses"
+                             constraintName="fk_address_customer"
+                             deferrable="true"
+                             initiallyDeferred="true"
+                             onDelete="CASCADE"
+                             onUpdate="RESTRICT"
+                             referencedColumnNames="id"
+                             referencedTableName="customers"/>
+
+
+    <insert tableName="customers">
+      <column name="first_name" value="juan"/>
+      <column name="last_name" value="rochabrun"/>
+      <column name="business_name" value="jr"/>
+      <column name="email" value="juanmcortezr@gmail.com"/>
+      <column name="tax_id" value="25663592"/>
+    </insert>
+
+    <insert tableName="customers">
+      <column name="first_name" value="mario"/>
+      <column name="last_name" value="cortez"/>
+      <column name="business_name" value="mc"/>
+      <column name="email" value="cortezjm@gmail.com"/>
+      <column name="tax_id" value="40732934"/>
+    </insert>
+
+    <insert tableName="addresses">
+      <column name="street" value="Jr. Zarumilla 515"/>
+      <column name="name" value="casa"/>
+      <column name="country" value="PE"/>
+      <column name="owner_id" value="1"/>
+    </insert>
+ 
+    <insert tableName="addresses">
+      <column name="street" value="Jr. Zarumilla 511"/>
+      <column name="name" value="cochera"/>
+      <column name="country" value="PE"/>
+      <column name="owner_id" value="1"/>
+    </insert>
+
+    <insert tableName="addresses">
+      <column name="street" value="Jr. Zarumilla 501"/>
+      <column name="name" value="casa"/>
+      <column name="country" value="PE"/>
+      <column name="owner_id" value="2"/>
+    </insert>
+
+  </changeSet>
+  
+</databaseChangeLog>
+
+

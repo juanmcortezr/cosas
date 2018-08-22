@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<databaseChangeLog
+    xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.1.xsd">
+
+  <changeSet id="1" author="domix">
+    <createTable tableName="orders">
+      <column name="id" type="bigint" autoIncrement="true">
+        <constraints primaryKey="true" nullable="false"/>
+      </column>
+      <column name="created_at" type="timestamp">
+        <constraints nullable="false"/>
+      </column>
+      <column name="amount" type="decimal">
+        <constraints nullable="false"/>
+      </column>
+      <column name="customer_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+      <column name="delivery_address_id" type="bigint">
+        <constraints nullable="false"/>
+      </column>
+    </createTable>
+
+   <insert tableName="orders">
+      <column name="created_at" value="2018-06-12"/>
+      <column name="amount" value="100"/>
+      <column name="customer_id" value="1"/>
+      <column name="delivery_address_id" value="1"/>
+    </insert>
+
+   <insert tableName="orders">
+      <column name="created_at" value="2018-06-13"/>
+      <column name="amount" value="200"/>
+      <column name="customer_id" value="1"/>
+      <column name="delivery_address_id" value="2"/>
+    </insert>
+  </changeSet>
+</databaseChangeLog>
+
+

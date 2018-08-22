@@ -1,0 +1,82 @@
+version: '3.3' 
+services:
+  authenticator:
+    image: circulo7/curso-ms-2018-agosto-semana2-clase5-authenticator:0.1-snapshot
+    environment:
+    - DATABASE_HOST=postgres
+    volumes:
+    - ./authenticator/src/main/resources/config.yaml:/opt/config.yaml
+    ports:
+    - 8090:8090
+    - 8091:8091
+    links:
+    - postgres
+  customers:
+    image: circulo7/curso-ms-2018-agosto-semana2-clase5-customers:0.1-snapshot
+    environment:
+    - DATABASE_HOST=postgres
+    - ORDENES_BASEURL=http://orders:9000/
+    - SECURITY_BASEURL=http://authenticator:8090/
+    volumes:
+    - ./customers/src/main/resources/config.yaml:/opt/config.yaml
+    ports:
+      - 8080:8080
+      - 8081:8081
+    links:
+    - postgres
+  orders:
+    image: circulo7/curso-ms-2018-agosto-semana2-clase5-orders:0.1-snapshot
+    environment:
+    - DATABASE_HOST=postgres
+    - CLIENTES_BASEURL=http://customers:8080/
+    - SECURITY_BASEURL=http://authenticator:8090/
+    volumes:
+    - ./orders/src/main/resources/config.yaml:/opt/config.yaml
+    ports:
+      - 9000:9000
+      - 9001:9001
+    links:
+    - postgres
+  postgres:
+    build: docker/postgres
+    environment:
+      - POSTGRES_PASSWORD=secret
+    ports:
+      - 5432:5432
+    volumes:
+      - db-data:/var/lib/postgresql/data
+  zipkin:
+    image: openzipkin/zipkin:2.11
+    ports:
+    - 9411:9411
+  prometheus:
+    image: prom/prometheus:v2.3.2
+    ports:
+    - 9090:9090
+    volumes:
+    - ./prometheus.yaml:/etc/prometheus/prometheus.yml
+    - prom-data:/prometheus
+    command:
+    - --config.file=/etc/prometheus/prometheus.yml
+  grafana:
+    image: grafana/grafana:5.2.2
+    ports:
+    - "3000:3000"
+    depends_on:
+    - prometheus
+    links:
+    - prometheus
+    restart: always
+  #gateway:
+  #  image: opentracing/nginx-opentracing:0.6.0
+  #  ports: 1000:80
+
+
+
+
+volumes:
+  db-data:
+  prom-data:
+
+
+

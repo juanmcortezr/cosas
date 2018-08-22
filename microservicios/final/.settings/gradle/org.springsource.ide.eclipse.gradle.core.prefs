@@ -1,0 +1,5 @@
+#org.springsource.ide.eclipse.gradle.core.preferences.GradleProjectPreferences
+#Tue Aug 21 21:06:02 CDT 2018
+build.family.org.gradle.tooling.model.eclipse.HierarchicalEclipseProject=;authenticator;customers;customersHttpClient;monitoring;orders;ordersHttpClient;security;
+org.springsource.ide.eclipse.gradle.linkedresources=
+org.springsource.ide.eclipse.gradle.rootprojectloc=

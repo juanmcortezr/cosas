@@ -1,0 +1,15 @@
+.gradle
+build
+out
+.gradletasknamecache
+*.iml
+*.ipr
+*.iws
+.idea
+README.html
+.classpath
+.project
+.settings
+*.hprof
+src/test/resources/orgs_ignored.yaml
+orgs_ignored.yaml

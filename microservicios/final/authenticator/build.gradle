@@ -1,0 +1,101 @@
+buildscript {
+  repositories {
+    jcenter()
+    mavenCentral()
+  }
+  dependencies {
+    classpath 'com.github.jengelman.gradle.plugins:shadow:2.0.3'
+    classpath 'com.bmuschko:gradle-docker-plugin:3.6.0'
+  }
+}
+
+plugins {
+  id 'java'
+  id 'idea'
+  id 'eclipse'
+  id 'application'
+}
+
+apply plugin: 'com.github.johnrengelman.shadow'
+apply plugin: 'com.bmuschko.docker-remote-api'
+
+version "0.1-SNAPSHOT"
+
+mainClassName = "pe.gob.sunat.microservices.curso.authenticator.App"
+
+run {
+  args += ['server', './src/main/resources/config.yaml']
+}
+
+shadowJar {
+  baseName = 'service'
+  classifier = null
+  version = null
+
+  mergeServiceFiles()
+  exclude 'META-INF/*.SF'
+  exclude 'META-INF/*.DSA'
+  exclude 'META-INF/*.RSA'
+}
+
+jar {
+  manifest {
+    attributes 'Main-Class': mainClassName
+  }
+}
+
+docker {
+  registryCredentials {
+    username = (System.getenv('DOCKER_BUILDER_USERNAME') ?: (project.hasProperty('dockerRegistryUsername') ? dockerRegistryUsername : '')) ?: ''
+    password = (System.getenv('DOCKER_BUILDER_PASSWORD') ?: (project.hasProperty('dockerRegistryPassword') ? dockerRegistryPassword : '')) ?: ''
+  }
+}
+
+dependencies {
+  def modules = [
+    'core',
+    'auth',
+    'jdbi3',
+    'migrations',
+  ]
+
+  modules.each { module ->
+    compile "io.dropwizard:dropwizard-${ module }:1.3.5"
+  }
+  compile 'org.postgresql:postgresql:42.2.4'
+
+  compile project(':monitoring')
+
+  // Use JUnit test framework
+  testImplementation 'junit:junit:4.12'
+}
+
+repositories {
+  jcenter()
+  mavenCentral()
+}
+
+
+task createDockerfile(type: com.bmuschko.gradle.docker.tasks.image.Dockerfile) {
+  destFile = project.file('build/libs/Dockerfile')
+  from 'openjdk:8u171-jre-slim'
+  maintainer 'Aqui tu nombre "tu@tuempresa.com"'
+  copyFile 'service.jar', '/opt/service.jar'
+
+  exposePort 8090, 8091
+  entryPoint 'java', "-Djava.awt.headless=true", "-Xms256m", "-Xmx256m", '-jar', '/opt/service.jar', 'server', '/opt/config.yaml'
+}
+
+task buildImage(type: com.bmuschko.gradle.docker.tasks.image.DockerBuildImage) {
+  dependsOn createDockerfile
+  inputDir = createDockerfile.destFile.parentFile
+  tag = "circulo7/curso-ms-2018-agosto-semana2-clase5-authenticator:${project.version}".toLowerCase()
+}
+
+task pushImage(type: com.bmuschko.gradle.docker.tasks.image.DockerPushImage) {
+  dependsOn buildImage
+  imageName = buildImage.tag
+}
+
+createDockerfile.dependsOn shadowJar
+
