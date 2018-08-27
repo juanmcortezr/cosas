@@ -62,6 +62,15 @@ public class AddressDaoImpl {
         .map(new AddressMapper())
         .list());
   }
+
+  public Optional<Address> findByCustomerAndId(Long customerId, Long id) {
+	    return jdbi.withHandle(handle ->
+	      handle.createQuery("SELECT * from addresses where owner_id=:customerId and id=:id")
+	      .bind("customerId", customerId)
+	      .bind("id", id)
+	        .map(new AddressMapper())
+	        .findFirst());
+  }
   
   public Optional<Address> find(Long id) {
     return jdbi.withHandle(handle ->

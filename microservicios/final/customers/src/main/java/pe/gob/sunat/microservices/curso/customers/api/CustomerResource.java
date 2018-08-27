@@ -49,7 +49,6 @@ public class CustomerResource {
   }
   
   @PUT
-  @Path("/{id}")
   public void update(@Valid Customer customer) {
     customerService.update(customer);
   }

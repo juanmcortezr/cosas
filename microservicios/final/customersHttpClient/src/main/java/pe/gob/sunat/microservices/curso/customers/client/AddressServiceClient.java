@@ -1,5 +1,7 @@
 package pe.gob.sunat.microservices.curso.customers.client;
 
+import java.util.Optional;
+
 import retrofit2.Call;
 import retrofit2.http.Body;
 import retrofit2.http.GET;
@@ -18,6 +20,13 @@ public interface AddressServiceClient {
 
   @GET("v1/addressess/{id}")
   Call<Address> getAddress(@Path("id") Long id);
+  
+
+  @GET("v1/addressess/{id}")
+  Call<Address> validateAddressCustomer(@Path("id") Long id);
+
+  @GET("v1/addressess/customer/{customerId}/{id}")
+  Call<Address> findByCustomer(@Path("customerId") Long customerId, @Path("id") Long id);
 }
 
 

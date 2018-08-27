@@ -50,7 +50,7 @@ public class AddressService {
 	}
 
 	public Address update(Address address) {
-		return update(address);
+		return dao.update(address);
 	}
 	
 	public Optional<Address> findById(Long id) {
@@ -59,6 +59,14 @@ public class AddressService {
 		//System.out.println("validateOrders en consulta por address: " + id + " " + validatedOrders);
 		
 	    return dao.find(id);
+	}
+	
+	public Optional<Address> findByCustomerAndId(Long customerId, Long id) {
+		
+		//boolean validatedOrders = orderService.validateOrderByAddress(id);
+		//System.out.println("validateOrders en consulta por address: " + id + " " + validatedOrders);
+		
+	    return dao.findByCustomerAndId(customerId, id);
 	}
 	
 	private boolean validateCustomer(Long id) {

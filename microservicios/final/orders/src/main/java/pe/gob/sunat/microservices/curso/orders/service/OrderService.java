@@ -24,6 +24,7 @@ public class OrderService {
     //System.out.println("deliveryAddressId: " + order.getDeliveryAddressId());
     Boolean validatedAddress = addressService.validateAddress(order.getDeliveryAddressId());
     //System.out.println("deliveryAddressId: " + validatedAddress);
+    Boolean validatedAddressCustomer = addressService.validateAddressCustomer(order.getCustomerId(), order.getDeliveryAddressId());
 
     if (!validatedCustomer) {
       throw new InvalidCustomerException("No se pudo validar al cliente. Se cancela la creación del pedido.", order.getCustomerId().toString());
@@ -31,6 +32,10 @@ public class OrderService {
     
     if (!validatedAddress) {
         throw new InvalidAddressException("No se pudo validar la direccion. Se cancela la creación del pedido.", order.getDeliveryAddressId().toString());
+    }
+
+    if (!validatedAddressCustomer) {
+        throw new InvalidAddressException("La direccion indicada no pertenece al cliente indicado. Se cancela la creación del pedido.", order.getDeliveryAddressId().toString());
     }
     
     order.setCreatedAt(new Date());

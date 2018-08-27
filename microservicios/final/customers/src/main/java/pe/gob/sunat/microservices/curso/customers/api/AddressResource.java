@@ -48,6 +48,13 @@ public class AddressResource {
 	// System.out.println("se llego al metodo con id: " + id + " " +addressService.findById(id).get().getId());
     return addressService.findById(id);
   }
+  
+  @GET
+  @Path("/customer/{customerId}/{id}")
+  public Optional<Address> findByCustomer(@PathParam("customerId") Long customerId, @PathParam("id") Long id) {
+	// System.out.println("se llego al metodo con id: " + id + " " +addressService.findById(id).get().getId());
+    return addressService.findByCustomerAndId(customerId, id);
+  }
 
   @DELETE
   @Path("/{id}")
@@ -56,7 +63,6 @@ public class AddressResource {
   }
   
   @PUT
-  @Path("/{id}")
   public void update(@Valid Address address) {
 	  addressService.update(address);
   }  

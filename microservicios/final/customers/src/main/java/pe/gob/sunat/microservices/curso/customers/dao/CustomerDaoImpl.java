@@ -34,7 +34,7 @@ public class CustomerDaoImpl {
   public Customer update(Customer customer) {
 	    jdbi.inTransaction(handle -> {
 	    String update = "update customers set " +
-	        "first_name=:first_name, last_name=:last_name, business_name=:business_name, email:=email, tax_id:=tax_id " +
+	        "first_name=:first_name, last_name=:last_name, business_name=:business_name, email=:email, tax_id=:tax_id " +
 	        "where id=:id ";
 	    return handle.createUpdate(update)
 	  	    .bind("id",  customer.getId())

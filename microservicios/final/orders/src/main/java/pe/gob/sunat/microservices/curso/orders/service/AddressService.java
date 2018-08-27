@@ -1,6 +1,7 @@
 package pe.gob.sunat.microservices.curso.orders.service;
 
 import pe.gob.sunat.microservices.curso.customers.client.AddressServiceClient;
+import pe.gob.sunat.microservices.curso.orders.service.command.AddressCustomerServiceRemoteInvokerCommand;
 import pe.gob.sunat.microservices.curso.orders.service.command.AddressServiceRemoteInvokerCommand;
 //import pe.gob.sunat.microservices.curso.orders.service.command.CustomerServiceRemoteInvokerCommand;
 
@@ -29,6 +30,20 @@ public class AddressService {
 	}*/
 	return
       new AddressServiceRemoteInvokerCommand(addressServiceClient, id)
+        .execute();
+  }
+
+  public Boolean validateAddressCustomer(Long customerId, Long id) {
+	/*try {
+		return addressServiceClient.findByCustomer(customerId, id).execute().isSuccessful();
+	}
+	catch (Exception e) {
+		e.printStackTrace();
+		return false;
+	}*/
+
+	return
+      new AddressCustomerServiceRemoteInvokerCommand(addressServiceClient, customerId, id)
         .execute();
   }
 }

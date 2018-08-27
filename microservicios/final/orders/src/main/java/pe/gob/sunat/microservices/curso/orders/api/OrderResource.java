@@ -45,7 +45,6 @@ public class OrderResource {
   }
   
   @PUT
-  @Path("/{id}")
   public void update(@Valid Order order) {
     orderService.update(order);
   }
