@@ -1,0 +1,456 @@
+<html>
+<head>
+
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<!-- meta http-equiv="X-UA-Compatible" content="IE=edge" / -->
+<meta http-equiv="X-UA-Compatible" content="IE=8,IE=9" />
+
+<title>Consulta de Solicitudes de Vigilancia</title>
+
+<link rel="stylesheet" href="/a/css/estilos2_0.css" />
+<link rel="stylesheet" href="/a/js/libs/bootstrap/3.3.1/css/bootstrap.min.css" />
+<link rel="stylesheet" href="/a/js/libs/jquery-ui/1.11.2/css/jquery-ui.min.css" />
+<link rel="stylesheet" href="/a/js/libs/jstree/3.0.0/themes/default/style.min.css" />
+<link rel="stylesheet" href="/a/js/libs/jqgrid/4.6.0/css/ui.jqgrid.css" />
+
+	<style>
+	a.jqGridLinkClass, a.jqGridLinkClass:hover {
+		text-decoration: underline;
+		cursor: pointer;
+		color: #0000EE;
+		visited: #551A8B;
+	}
+
+	.ui-datepicker .ui-datepicker-title select {
+	    color: #000;
+	}
+	</style>
+</head>
+
+<body>
+
+<div class="container">
+  <div class="panel panel-primary">
+    <div class="panel-heading">
+      <h1 class="panel-title text-left">Consulta de Tipo de Cambio</h1>
+    </div>
+
+    <div class="panel-body">
+
+      <div class="panel panel-primary">
+	<div class="panel-body">
+
+	  <div class="row">
+	    <div class="col-md-12"></div>
+	  </div>
+	  
+	  </br>
+
+	  <div class="row">
+	    <div class="col-md-2"><p style="text-align:right;" >N&uacute;mero de Solicitud:</p></div>
+
+	    <div class="col-md-2">
+	      <select id="selEstadoRegistro" class="form-control input-sm">
+	      </select>
+	    </div>
+
+	    <div class="col-md-2"><p style="text-align:right;">C&oacute;digo de Solicitud:</p></div>
+	    <div class="col-md-2">
+	      <input type="text" class="form-control" id="txtFechaRegistroDesde">
+	    </div>
+	    <div class="col-md-4"></div>
+	    </div> 
+          </div>
+	
+	  </br>
+	   
+	  <div class="row">
+	    <div class="col-md-2"> <p style="text-align:right;" >Estado:</p></div>
+
+	    <div class="col-md-2">
+	      <select id="selEstadoRegistro" class="form-control input-sm">
+	      </select>
+	    </div>
+
+	    <div class="col-md-2"><p style="text-align:right;">Desde:</p></div>
+	    <div class="col-md-2">
+	      <input type="text" class="form-control" id="txtFechaRegistroDesde">
+	    </div>
+	    <div class="col-md-2"><p style="text-align:right;">Hasta:</p></div>
+	    <div class="col-md-2">
+	      <input type="text" class="form-control" id="txtFechaRegistroHasta">
+	    </div> 
+          </div>
+	
+	  </br>
+        </div>
+
+	<!-- br -->
+
+      <div class="panel panel-primary">
+  	<div class="panel-body">
+          <div class="row">
+	    <div class="col-md-5">
+            </div>
+            <div class="col-md-2">
+              <div class="bs-example">
+                <button id="btnConsultar" type="button" class="btn btn-primary">Consultar</button>
+              </div>
+            </div>
+            <div class="col-md-5">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- br -->
+
+      <div class="panel panel-primary">
+        <div class="panel-heading">
+          <h3 class="panel-title">Consulta de Tipo de Cambio</h3>
+        </div>
+        <div class="panel-body center">
+          <div class="center"><table id="listaSolicitudesVigilancia"></table></div>
+          <div class="center" id="paginadorListaSolicitudesVigilancia"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+</body>
+
+<script src="/a/js/libs/html5/html5shiv.js"></script>
+<script src="/a/js/libs/html5/respond.js"></script>
+
+<script src="/a/js/libs/jquery/1.11.1/jquery.min.js"></script>
+
+<script src="/a/js/libs/chosen/1.2.0/chosen.jquery.min.js"></script>
+<script src="/a/js/libs/jquery/plugins/validation/1.13.1/jquery.validate.js"></script>
+<script src="/a/js/libs/jquery/plugins/validation/1.13.1/additional-methods.js"></script>
+
+<script src="/a/js/libs/jquery-ui/1.11.4/js/jquery-ui.min.js"></script>
+<script src="/a/js/libs/jqgrid/4.6.0/js/jquery.jqGrid.src.js"></script>
+<script src="/a/js/libs/jqgrid/4.6.0/js/i18n/grid.locale-es.js"></script>
+<script src="/a/js/libs/jstree/3.0.0/jstree.min.js"></script>
+
+<script src="/a/js/libs/bootbox/4.4.0/bootbox.js"></script>
+<script src="/a/js/libs/bootstrap/3.3.1/js/bootstrap.min.js"></script>
+
+<script src="/a/js/js.js"></script>
+
+<script>
+
+function triggerResizeEvent() {
+	if (!isBrowserInternetExplorer()) {
+		setTimeout(function() {
+			window.dispatchEvent(new Event("resize"));
+		}, /*200*/100);
+	}
+	else {
+		setTimeout(function() {
+			$(window).trigger("resize");
+		}, /*200*/100);
+	}
+}
+
+function isBrowserInternetExplorer() {
+	var flagIsInternetExplorer = false;
+	var userAgentClient = navigator.userAgent;
+	var patronNavegador = new Array();
+	patronNavegador[0] = /MSIE/;
+	patronNavegador[1] = /Trident/;
+
+	if (patronNavegador[0].test(userAgentClient) || patronNavegador[1].test(userAgentClient)) {
+		flagIsInternetExplorer = true;
+	}
+	return flagIsInternetExplorer;
+}
+
+$(document).ready(function(){
+
+	// inicializacion de datepicker en castellano
+	$.datepicker.regional['es'] = {
+		closeText: 'Cerrar',
+		prevText: '< Ant',
+		nextText: 'Sig >',
+		currentText: 'Hoy',
+		monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+		monthNamesShort: ['Ene','Feb','Mar','Abr', 'May','Jun','Jul','Ago','Sep', 'Oct','Nov','Dic'],
+		dayNames: ['Domingo', 'Lunes', 'Martes', 'Mi�rcoles', 'Jueves', 'Viernes', 'S�bado'],
+		dayNamesShort: ['Dom','Lun','Mar','Mi�','Juv','Vie','S�b'],
+		dayNamesMin: ['Do','Lu','Ma','Mi','Ju','Vi','S�'],
+		weekHeader: 'Sm',
+		dateFormat: 'dd/mm/yy',
+		firstDay: 1,
+		isRTL: false,
+		showMonthAfterYear: false,
+		yearSuffix: ''
+	};
+	$.datepicker.setDefaults($.datepicker.regional['es']);
+
+	$(document).ajaxStart($.blockUI).ajaxStop($.unblockUI);
+	iniciaComponentes();
+
+	//resize de la grilla
+	var offset = 20;
+	var w = $('#listaSolicitudesVigilancia').closest('.panel').innerWidth();
+	$('#listaSolicitudesVigilancia').jqGrid('setGridWidth', w-offset);
+
+	//manejo de resizing de la pantalla para IE
+	if ( isBrowserInternetExplorer() ) {
+		var myInterval = setInterval(triggerResizeEvent, /*500*/300);
+	}
+});
+
+var listaSolicitudesVigilancia;
+
+function toDate(from) {
+
+	var resultado = null;
+
+	try {
+		var numbers = from.match(/\d+/g);
+		var date = new Date(numbers[2], numbers[1]-1, numbers[0]);//new Date(numbers[2], numbers[0]-1, numbers[1]);
+		resultado = date;
+	}
+	catch (e) {
+		resultado = null;
+	}
+
+	return resultado;
+}
+
+function mostrarMensajeAlerta(titulo, mensaje) {
+
+	var mensajes = new Array();
+	mensajes[0] = mensaje;
+	mostrarMensajesAlerta(titulo, mensajes);
+}
+
+function mostrarMensajesAlerta(titulo, mensajes) {
+
+	var cadenaMensajes = "";
+	for (var i = 0 ; i < mensajes.length; i++) {
+		cadenaMensajes = cadenaMensajes + "<p align='center'>" + mensajes[i]+"</p>";
+	}
+
+	var dialog = bootbox.dialog( {
+		title: titulo,
+		//message: "<p align='center'>Debe ingresar por lo menos tres caracteres distintos a vacio para realizar la busqueda.</p>",
+		message: cadenaMensajes,
+		buttons: {
+			ok: {
+				label: "Aceptar",
+				className: 'btn-primary center-block'
+			}
+		}
+	});
+}
+
+function iniciaComponentes() {
+
+	$(window).bind('resize', function()  {
+		var offset = 20;
+		var ow = 0;
+		var nw = 0;
+
+		ow = $('#listaSolicitudesVigilancia').jqGrid("getGridParam", "width");
+        nw = $('#listaSolicitudesVigilancia').closest('.panel').innerWidth() - offset;
+
+	    if (ow !== nw) {
+	    	$('#listaSolicitudesVigilancia').jqGrid("setGridWidth", nw);
+	    }
+	}).trigger("resize");
+
+	iniciaBotones();
+	iniciaFiltros();
+	iniciaGrillaSolicitudesVigilancia();
+}
+
+function iniciaBotones() {
+
+    $("button#btnConsultar").prop("disabled",false);
+    $("button#btnConsultar").bind('click', clickBtnConsultar);
+}
+
+
+var clickBtnConsultar = function() {
+
+	var mensajes = new Array();
+	var indice = 0;
+	var resultado = true;
+
+	var txtFechaRegistroDesde = $.trim($( "input#txtFechaRegistroDesde" ).val());
+	var txtFechaRegistroHasta = $.trim($( "input#txtFechaRegistroHasta").val());
+
+	var selSolicitudesVigilancia = $.trim($("select#selSolicitudesVigilancia").val());
+
+	var fechaRegistroDesde = toDate(txtFechaRegistroDesde);
+	var fechaRegistroHasta = toDate(txtFechaRegistroHasta);
+
+	var hoy = new Date();
+	hoy.setHours(0);
+	hoy.setMinutes(0);
+	hoy.setSeconds(0);
+
+	/* INICIO TO DO
+	if (fechaRegistroDesde == null && fechaRegistroHasta == null) {
+
+		mensajes[indice++] = "Debe Ingresar el Rango de Fecha a Consultar";
+
+		resultado = false;
+	}
+	else if (fechaRegistroDesde != null && fechaRegistroHasta == null) {
+		mensajes[indice++] = "Ingrese  la fecha 'hasta'.";
+		resultado = false;
+	}
+	else if (fechaRegistroDesde == null && fechaRegistroHasta != null) {
+		mensajes[indice++] = "Ingrese  la fecha 'desde'.";
+		resultado = false;
+	}
+	else if (fechaRegistroDesde != null && fechaRegistroHasta != null) {
+		if (fechaRegistroDesde > fechaRegistroHasta) {
+			mensajes[indice++] = "La fecha desde debe ser menor igual a la fecha Hasta.";
+			resultado = false;
+		}
+		else if (fechaRegistroHasta - fechaRegistroDesde > 365*24*60*60*1000) {
+			mensajes[indice++] = "El rango maximo a consultar es de '1 a&ntilde;o'";
+			resultado = false;
+		}
+	}
+	FIN TO DO */
+
+	if (resultado == false) {
+		mostrarMensajesAlerta("", mensajes);
+	}
+	else {
+		cargaListaSolicitudesVigilancia();
+	}
+}
+
+function iniciaFiltros() {
+
+	$("select#selSolicitudesVigilancia").prop('selectedIndex', 0);
+
+
+   	$( "input#txtFechaRegistroDesde" ).datepicker({ maxDate: 0, dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true }).datepicker("setDate", new Date());
+	$( "input#txtFechaRegistroHasta" ).datepicker({ maxDate: 0, dateFormat: 'dd/mm/yy', changeMonth: true, changeYear: true }).datepicker("setDate", new Date());
+
+	$("input#txtFechaRegistroDesde").prop("disabled",false);
+	$("input#txtFechaRegistroHasta").prop("disabled",false);
+}
+
+function addOption(targetName, value, text) {
+
+   var select = $("select#" + targetName).get(0);
+
+    if (select == null) {
+        return false;
+    }
+    else {
+        var opt = document.createElement('option');
+        opt.value = value;
+        opt.text = text;
+        select.appendChild(opt);
+    }
+}
+
+
+function iniciaGrillaSolicitudesVigilancia() {
+
+	jQuery('#listaSolicitudesVigilancia').jqGrid({
+		datatype: 'local',
+		colNames:
+		[
+			'Fecha de Cierre',
+			'Fecha de Publicaci&oacute;n',
+			'Fecha de Registro',
+			'Tipo de Moneda',
+			'Precio de Venta',
+			'Precio de Compra'
+		],
+		colModel:
+		[
+			{name:'fechaCierre',index:'fechaCierre',width:120, align:'center'},
+			{name:'fechaPublicacion',index:'fechaPublicacion',width:120, align:'center'},
+			{name:'fechaRegistro',index:'fechaRegistro',width:120, align:'center'},
+			{name:'tipoMoneda',index:'tipoMoneda',width:100, align:'center'},
+			{name:'precioVenta',index:'precioVenta',width:140, align:'center'},
+			{name:'precioCompra',index:'precioCompra',width:120, align:'center'}
+		],
+		rowNum:30,
+		rowList:[10,20,30,50],
+		pager: '#paginadorListaSolicitudesVigilancia',
+		sortname: 'id',
+		viewrecords: true,
+		sortorder: 'desc',
+		altRows: true,
+		multiselect: false,
+		multiboxonly: true,
+		headertitles: true,
+		hidegrid: false,
+		recordpos:'left',
+		pagerpos:'right',
+		viewrecords : true
+	});
+
+	var offset = 20;
+	var w = $('#listaSolicitudesVigilancia').closest('.panel').innerWidth();
+	$('#listaSolicitudesVigilancia').jqGrid('setGridWidth', w-offset);
+}
+
+function cargaGrillaSolicitudesVigilancia() {
+
+	for(var i = 0; i < listaSolicitudesVigilancia.length; i++){
+		var s = listaSolicitudesVigilancia[i];
+
+		var datarow = {
+			fechaRegistro: s.fechaRegistro,
+			fechaPublicacion: s.fechaPublicacion,
+			fechaCierre: s.fechaCierre,
+			tipoMoneda: s.tipoMoneda,
+			precioVenta: s.precioVenta,
+			precioCompra: s.precioCompra
+		}
+		var su=jQuery("#listaSolicitudesVigilancia").jqGrid('addRowData',s.fechaRegistro + s.tipoMoneda,datarow);
+	}
+
+	jQuery("#listaSolicitudesVigilancia").setGridParam({rowNum: 30}).trigger("reloadGrid");//era 10 se cambio a 30
+}
+
+
+function cargaListaSolicitudesVigilancia() {
+
+	var selSolicitudesVigilancia = $.trim($("select#selSolicitudesVigilancia").val());
+
+	var txtFechaRegistroDesde = $.trim($( "input#txtFechaRegistroDesde" ).val());
+	var txtFechaRegistroHasta = $.trim($( "input#txtFechaRegistroHasta" ).val());
+
+	var ajax_data = {
+
+		"txtFechaRegistroDesde": txtFechaRegistroDesde,
+		"txtFechaRegistroHasta": txtFechaRegistroHasta,
+		"selSolicitudesVigilancia": selSolicitudesVigilancia
+
+	};
+
+	listaSolicitudesVigilancia = new Array();
+
+	var solicitud = new Object();
+	solicitud.fechaRegistro = "12/09/2018";
+	solicitud.fechaPublicacion = "11/09/2018";
+	solicitud.fechaCierre = "11/09/2018";
+	solicitud.tipoMoneda = "US$";
+	solicitud.precioVenta = "3.26";
+	solicitud.precioCompra = "3.23";
+	listaSolicitudesVigilancia[0] = solicitud;
+
+	$("#listaSolicitudesVigilancia").jqGrid('clearGridData');
+
+	cargaGrillaSolicitudesVigilancia();
+}
+
+</script>
+
+</html>
