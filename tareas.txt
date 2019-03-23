@@ -1,0 +1,4 @@
+1. los combos, el tercero se selecciona de acuerdo a los dos primeros
+2. el seguimiento visualizarlo
+3. visualizar las grillas y los link de acuerdo a lo que se presione
+4. visualizar la ventana de descarga (sin funcinoalidad real)
