@@ -1,0 +1,48 @@
+clases de beans:
+
+los campos que son equivalentes a los seriales, utilizar long en lugar de int
+los campos de tipo fecha manejarlos como java.sql.date (actualmente estan como string)
+
+clases de model:
+
+los campos que son equivalentes a los seriales, utilizar long en lugar de int
+los campos de tipo fecha manejarlos como java.sql.date (actualmente estan como string)
+user tipo byte[] para los campos de archivos (Ejem: t10446arcdataacf.arc_contenido)
+
+clases controller:
+
+definir tipos de input y retorno (negociable)
+
+clases service:
+
+definir tipos de input y retorno (negociable)
+
+diagrama de componentes batch:
+
+no hace referencia a las clases del modelo de negocio (dao, service, model)
+
+diagrama de paquetes:
+
+se encuentra vacio (negociable)
+
+diagrama de despliegue batch:
+
+mostrar el ear batch, no y mostrar adeas todos los selectores (tomar como base el diagrama del f2 que esta mas detallado que el del oom)
+
+F2:
+
+En 1.2	ESPECIFICACIÓN DE LOS REQUERIMIENTOS DE LA ARQUITECTURA TECNOLÓGICA:
+
+indicar que el nginx (servidor web) y el bus de integracion (middleware) son parte de la plataforma tecnologica.
+
+especificaciones de construccion: 
+
+las clases de tipo dao, service y controller SIEMPRE su nombre empieza con primera letra ne mayusculas
+
+
+1.5.1 entorno de construccion, indicar:
+
+en que entorno se van a desarrollar los projectos de angular? plugin eclipse? otro ide?
+que se va a incluir en el nignx los ts o los js transofrmados en base al ts?
+como se va a probar el contenido que va en el nginx? se va a trabajar indivivualmente con el nginx por cada estacion de trabajo? despliegue unico en nignx de integracion?
+
